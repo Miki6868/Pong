@@ -1,19 +1,8 @@
 from turtle import Screen
 from paddles import Paddle
+from ball import Ball
+import time
 
-<<<<<<< HEAD
-
-screen = Screen()
-paddle = Paddle()
-
-
-screen.setup(width=800, height=600)
-screen.bgcolor("black")
-
-screen.listen()
-screen.onkey(paddle.go_up, "Up")
-screen.onkey(paddle.go_down, "Down")
-=======
 screen = Screen()
 screen.title("Pong Game")
 screen.setup(width=800, height=600)
@@ -21,8 +10,9 @@ screen.bgcolor("black")
 screen.tracer(0)
 
 
-left_paddle = Paddle((-390, 0))
-right_paddle = Paddle((380, 0))
+left_paddle = Paddle((-375, 0))
+right_paddle = Paddle((370, 0))
+ball = Ball()
 
 screen.listen()
 
@@ -34,7 +24,17 @@ screen.onkeypress(right_paddle.move_down, "Down")
 game_is_on = True
 while game_is_on:
     screen.update()
->>>>>>> c2f1b67 (main and paddles ,paddles onkeypress works better)
+    ball.move()
+    time.sleep(0.1)
+    # Detect collision with top and bottom walls
+    if ball.ycor() > 280 or ball.ycor() < -280:
+        ball.bounce_y()
+    # Detect collision with paddles
+    if (ball.xcor() > 350 and ball.distance(right_paddle) < 50) or (ball.xcor() < -350 and ball.distance(left_paddle) < 50): 
+        ball.bounce_x()
+    # Detect if ball goes out of bounds
+    if ball.xcor() > 380 or ball.xcor() < -380:
+        ball.reset_position()    
 
 
 screen.exitonclick()
